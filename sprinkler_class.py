@@ -11,4 +11,3 @@ class cycle:
         self.number = number
         self.stations = list(stations)
         self.durations = list(durations)
-        #This was added just to test github
