@@ -24,5 +24,3 @@ while True:
         time.sleep(1)
         print("Canceling Timer", count)
         timer1.cancel()
-
-#again a comment so I can test github
