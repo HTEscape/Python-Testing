@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from sprinkler_class import station, cycle
 from multiprocessing import Process, Pipe
 import Station_Timers
@@ -13,10 +13,14 @@ def hello_world():
 
 @app.route('/test')
 def test():
-    message = "data"
-    flask_conn.send(message)
-    result = flask_conn.recv()
-    return result
+    command_list = request.args.getlist('command')
+    command_length = len(command_list)
+    if (command_length > 0):
+        flask_conn.send(command_list[0])
+        result = flask_conn.recv()
+        return result
+    else:
+        return "No Command supplied!"
 
 
 if __name__ == '__main__':
@@ -28,12 +32,14 @@ if __name__ == '__main__':
     print(station1.name, "active =", station1.enabled)
     station1.myfunc()
 
-    cycle1 = cycle(1, [2, 5, 7], [10, 9, 8])
-    cycle2 = cycle(2, [1, 3, 5, 7], [100, 49, 20, 65])
+    cycle1 = cycle(1, '8:00', [2, 5, 7], [10, 9, 8], [1,2,3], True)
+    cycle2 = cycle(2, '10:00', [1, 3, 5, 7], [100, 49, 20, 65], [9,8,5], False)
 
     print("Cycle 1 stations:", cycle1.stations)
     print("Cycle 1 durations:", cycle1.durations)
     print("Cycle 2 stations:", cycle2.stations)
     print("Cycle 2 durations:", cycle2.durations)
+    print(cycle1.getValues())
+    print(cycle2.getValues())
 
     app.run(debug=False, threaded=True)
