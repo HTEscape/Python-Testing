@@ -1,20 +1,29 @@
 from flask import Flask
 from sprinkler_class import station, cycle
+from multiprocessing import Process, Pipe
+import Station_Timers
 
 app = Flask(__name__)
-
+flask_conn, timers_conn = Pipe()
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
+
 @app.route('/test')
 def test():
-
-    return 'Something'
+    message = "data"
+    flask_conn.send(message)
+    result = flask_conn.recv()
+    return result
 
 
 if __name__ == '__main__':
+
+    timer_process = Process(target=Station_Timers.Main, args=(timers_conn,))
+    timer_process.start()
+
     station1 = station('Chads Station', True)
     print(station1.name, "active =", station1.enabled)
     station1.myfunc()
@@ -27,4 +36,4 @@ if __name__ == '__main__':
     print("Cycle 2 stations:", cycle2.stations)
     print("Cycle 2 durations:", cycle2.durations)
 
-    app.run()
+    app.run(debug=False, threaded=True)
