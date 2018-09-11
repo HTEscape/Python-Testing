@@ -34,8 +34,12 @@ def Main(process_conn):
         '''
         if (process_conn.poll()):
             return_message = "I received your message."
-            if (process_conn.recv() == "data"):
+            incoming_message = process_conn.recv()
+            if (incoming_message == "data"):
                 process_conn.send(return_message)
+            elif ((incoming_message > '0') and (incoming_message < '9')):
+                set_timer(int(incoming_message), 2).start()
+                process_conn.send("A timer was set for station " + incoming_message)
             else:
                 process_conn.send("Something went wrong")
         time.sleep(.001)

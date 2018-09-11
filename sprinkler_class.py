@@ -1,5 +1,6 @@
 class station:
-    def __init__(self, name='Station', enabled=False):
+    def __init__(self, number, name='Station',  enabled=False):
+        self.number = number
         self.name = name
         self.enabled = enabled
 
@@ -8,7 +9,7 @@ class station:
 
 
 class cycle:
-    def __init__(self, number, startTime, daysOfWeek = [], stations = [], durations = [], enabled=False):
+    def __init__(self, number, startTime=None, daysOfWeek = [], stations = [], durations = [], enabled=False):
         self.number = number
         self.startTime = startTime
         self.daysOfWeek = list(daysOfWeek)

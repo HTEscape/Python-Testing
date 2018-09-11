@@ -28,12 +28,13 @@ if __name__ == '__main__':
     timer_process = Process(target=Station_Timers.Main, args=(timers_conn,))
     timer_process.start()
 
-    station1 = station('Chads Station', True)
+    station1 = station(1, 'Chads Station', True)
     print(station1.name, "active =", station1.enabled)
     station1.myfunc()
 
     cycle1 = cycle(1, '8:00', [2, 5, 7], [10, 9, 8], [1,2,3], True)
     cycle2 = cycle(2, '10:00', [1, 3, 5, 7], [100, 49, 20, 65], [9,8,5], False)
+    cycle3 = cycle(3)
 
     print("Cycle 1 stations:", cycle1.stations)
     print("Cycle 1 durations:", cycle1.durations)
@@ -41,5 +42,6 @@ if __name__ == '__main__':
     print("Cycle 2 durations:", cycle2.durations)
     print(cycle1.getValues())
     print(cycle2.getValues())
+    print(cycle3.getValues())
 
     app.run(debug=False, threaded=True)
