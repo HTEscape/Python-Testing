@@ -8,9 +8,15 @@ class station:
     def myfunc(self):
         print("Hello my name is " + self.name)
 
+    def turnOn(self):
+        self.active = True
+
+    def turnOff(self):
+        self.active = False
+
 
 class cycle:
-    def __init__(self, number, name, startTime=None, daysOfWeek = [], stations = [], durations = [], enabled=False):
+    def __init__(self, number, name, startTime, daysOfWeek, stations, durations, enabled=False):
         self.number = number
         self.name = name
         self.startTime = startTime
@@ -18,7 +24,8 @@ class cycle:
         self.stations = list(stations)
         self.durations = list(durations)
         self.enabled = enabled
+        self.totalDuration = sum(self.durations)
 
     def getValues(self):
-        values = [self.number, self.startTime, self.daysOfWeek, self.stations, self.durations, self.enabled]
+        values = [self.number, self.name, self.startTime, self.daysOfWeek, self.stations, self.durations, self.enabled]
         return values

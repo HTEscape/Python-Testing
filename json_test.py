@@ -47,3 +47,4 @@ with open('config.json') as f:
 print(loaded_data['cycles'][0]['name'])
 print(loaded_data['cycles'][1]['name'])
 print(len(loaded_data['stations']))
+
