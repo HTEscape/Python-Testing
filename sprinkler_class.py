@@ -16,16 +16,18 @@ class station:
 
 
 class cycle:
-    def __init__(self, number, name, startTime, daysOfWeek, stations, durations, enabled=False):
+    def __init__(self, number, name, startTimeHour, startTimeMinute, daysOfWeek, stations, durations, enabled=False):
         self.number = number
         self.name = name
-        self.startTime = startTime
+        self.startTimeHour = startTimeHour
+        self.startTimeMinute = startTimeMinute
         self.daysOfWeek = list(daysOfWeek)
         self.stations = list(stations)
         self.durations = list(durations)
         self.enabled = enabled
         self.totalDuration = sum(self.durations)
+        self.ranToday = False
 
     def getValues(self):
-        values = [self.number, self.name, self.startTime, self.daysOfWeek, self.stations, self.durations, self.enabled]
+        values = [self.number, self.name, self.startTimeHour, self.startTimeMinute, self.daysOfWeek, self.stations, self.durations, self.enabled]
         return values
