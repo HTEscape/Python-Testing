@@ -37,14 +37,21 @@ def update_time():
             current_hour = time_now.hour
         check_start_times()
 
+def cancel_cycle():
+    sprinkler_conn.send({"command": "cancel"})
+
+def manual_cycle(station, duration):
+    data_to_send = {"command": "cycle", "stations": station,
+                    "durations": duration}
+    sprinkler_conn.send(data_to_send)
 
 def check_pipes(flaskpipe):
     if (sprinkler_conn.poll()):
         incoming_message = sprinkler_conn.recv()
         if (incoming_message['command'] == "station_on"):
-            station_list[incoming_message['number']-1].active = True
+            station_list[incoming_message['number']-1].turnOn()
         elif (incoming_message['command'] == "station_off"):
-            station_list[incoming_message['number']-1].active = False
+            station_list[incoming_message['number']-1].turnOff()
         elif (incoming_message['command'] == "error"):
             print("The error message from the pipe is :" + incoming_message['message'])
 
