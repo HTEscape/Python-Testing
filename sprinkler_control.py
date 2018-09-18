@@ -55,6 +55,12 @@ def check_pipes(flaskpipe):
         elif (incoming_message['command'] == "error"):
             print("The error message from the pipe is :" + incoming_message['message'])
 
+    if (flaskpipe.poll()):
+        incoming_message = flaskpipe.recv()
+        if (incoming_message['command'] == "stations"):
+            pass
+            #flaskpipe.send(json.dumps(station_list))
+
 
 
 def main(flask_pipe):

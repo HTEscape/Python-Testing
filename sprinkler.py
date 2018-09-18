@@ -2,6 +2,7 @@ from flask import Flask, request
 from sprinkler_class import station, cycle
 from multiprocessing import Process, Pipe
 import sprinkler_control
+import json
 
 app = Flask(__name__)
 flask_conn, sprinkler_conn = Pipe()
@@ -21,6 +22,20 @@ def test():
         return result
     else:
         return "No Command supplied!"
+
+
+@app.route('/stations')
+def stations():
+    with open('sprinkler_config.json') as f:
+        loaded_data = json.load(f)
+    return json.dumps(loaded_data['stations'], sort_keys=True)
+
+
+@app.route('/cycles')
+def cycles():
+    with open('sprinkler_config.json') as f:
+        loaded_data = json.load(f)
+    return json.dumps(loaded_data['cycles'], sort_keys=True)
 
 
 if __name__ == '__main__':
