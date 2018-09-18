@@ -24,7 +24,7 @@ def check_start_times():
                 sprinkler_conn.send(data_to_send)
                 #received_data = sprinkler_conn.recv()
                 #print(received_data)
-                print(cycle_list[j].name, "has Started")
+                #print(cycle_list[j].name, "has Started")
                 break
 
 def update_time():
@@ -43,12 +43,8 @@ def check_pipes(flaskpipe):
         incoming_message = sprinkler_conn.recv()
         if (incoming_message['command'] == "station_on"):
             station_list[incoming_message['number']-1].active = True
-            print("Station" + str(incoming_message['number']-1) + "active property:" +
-                  str(station_list[incoming_message['number']-1].active))
         elif (incoming_message['command'] == "station_off"):
             station_list[incoming_message['number']-1].active = False
-            print("Station" + str(incoming_message['number']-1) + "active property:" +
-                  str(station_list[incoming_message['number']-1].active))
         elif (incoming_message['command'] == "error"):
             print("The error message from the pipe is :" + incoming_message['message'])
 

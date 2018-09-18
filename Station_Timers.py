@@ -13,13 +13,15 @@ def shut_off_station(station):
     data_to_send = {"command": "station_off", "number": station}
     pipe_connection.send(data_to_send)
 
+def turn_on_station(station):
+    global pipe_connection
+    print("Turned on Station", str(station))
+    data_to_send = {"command": "station_on", "number": station}
+    pipe_connection.send(data_to_send)
 
 def set_timer(station, duration):
-    global pipe_connection
     global active_station
     active_station = threading.Timer(duration, shut_off_station, args=[station])
-    data_to_send = {"command":"station_on", "number":station}
-    pipe_connection.send(data_to_send)
     return active_station
 
 def check_cycles_left():
@@ -27,10 +29,15 @@ def check_cycles_left():
     if active_station.isAlive() == False:
         if cycles_left:
             if len(cycles_left['stations']) > 0:
-                print("Turned on Station", str(cycles_left['stations'][0]))
+                turn_on_station(cycles_left['stations'][0])
                 set_timer(cycles_left['stations'][0], cycles_left['durations'][0]).start()
                 cycles_left['stations'].pop(0)
                 cycles_left['durations'].pop(0)
+                if (len(cycles_left['stations']) == 0):
+                    del cycles_left['stations']
+                    del cycles_left['durations']
+                    del cycles_left['command']
+
 
 def Main(process_conn):
     global pipe_connection
@@ -63,7 +70,15 @@ def Main(process_conn):
                 else:
                     process_conn.send({"command":"error", "message":"A cycle is already running."})
                     print("A cycle is already running.")
+                    continue
+                turn_on_station(cycles_left['stations'][0])
                 set_timer(cycles_left['stations'][0], cycles_left['durations'][0]).start()
+                cycles_left['stations'].pop(0)
+                cycles_left['durations'].pop(0)
+                if (len(cycles_left['stations']) == 0):
+                    del cycles_left['stations']
+                    del cycles_left['durations']
+                    del cycles_left['command']
             else:
                 process_conn.send({"command":"error", "message":"Something went wrong"})
         check_cycles_left()
