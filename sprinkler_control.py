@@ -18,12 +18,14 @@ sprinkler_conn, timers_conn = Pipe()
 def check_start_times():
     for j in range(len(cycle_list)):
         if cycle_list[j].enabled:
-            if not cycle_list[j].ranToday:
-                if (current_hour == cycle_list[j].startTimeHour) and (current_minute == cycle_list[j].startTimeMinute):
-                    print(cycle_list[j].name, "has Started")
-                    cycle_list[j].ranToday = True
-                    break
-
+            if (current_hour == cycle_list[j].startTimeHour) and (current_minute == cycle_list[j].startTimeMinute):
+                data_to_send = {"command": "cycle", "stations": cycle_list[j].stations,
+                                "durations": cycle_list[j].durations}
+                sprinkler_conn.send(data_to_send)
+                #received_data = sprinkler_conn.recv()
+                #print(received_data)
+                print(cycle_list[j].name, "has Started")
+                break
 
 def update_time():
     global current_minute
@@ -37,7 +39,19 @@ def update_time():
 
 
 def check_pipes(flaskpipe):
-    pass
+    if (sprinkler_conn.poll()):
+        incoming_message = sprinkler_conn.recv()
+        if (incoming_message['command'] == "station_on"):
+            station_list[incoming_message['number']-1].active = True
+            print("Station" + str(incoming_message['number']-1) + "active property:" +
+                  str(station_list[incoming_message['number']-1].active))
+        elif (incoming_message['command'] == "station_off"):
+            station_list[incoming_message['number']-1].active = False
+            print("Station" + str(incoming_message['number']-1) + "active property:" +
+                  str(station_list[incoming_message['number']-1].active))
+        elif (incoming_message['command'] == "error"):
+            print("The error message from the pipe is :" + incoming_message['message'])
+
 
 
 def main(flask_pipe):
@@ -77,6 +91,7 @@ def main(flask_pipe):
 
     timer_process = Process(target=Station_Timers.Main, args=(timers_conn,))
     timer_process.start()
+
     while True:
         update_time()
         check_pipes(flask_pipe)

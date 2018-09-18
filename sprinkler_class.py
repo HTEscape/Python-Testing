@@ -26,7 +26,6 @@ class cycle:
         self.durations = list(durations)
         self.enabled = enabled
         self.totalDuration = sum(self.durations)
-        self.ranToday = False
 
     def getValues(self):
         values = [self.number, self.name, self.startTimeHour, self.startTimeMinute, self.daysOfWeek, self.stations, self.durations, self.enabled]

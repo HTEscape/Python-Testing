@@ -7,14 +7,14 @@
         5
       ],
       "durations": [
-        10,
-        15
+        4,
+        6
       ],
       "enabled": true,
       "name": "Cycle 1",
       "number": 1,
-      "start time hour": 18,
-      "start time minute": 14,
+      "start time hour": 17,
+      "start time minute": 30,
       "stations": [
         1,
         2
