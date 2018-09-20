@@ -4,12 +4,17 @@ from multiprocessing import Process, Pipe
 import sprinkler_control
 import json
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 flask_conn, sprinkler_conn = Pipe()
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
+
+
+@app.route('/json_test')
+def jsonTest():
+    return app.send_static_file('json_test.html')
 
 
 @app.route('/test')
